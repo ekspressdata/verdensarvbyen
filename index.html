@@ -1,0 +1,407 @@
+<!doctype html>
+<!--  Kartet er laget av Ekspressdata for  Planavdelingen i Tinn kommune
+      https://tinn.kommune.no -->
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      Verdensarvbyen - Arkitektur, bygningstyper og byplanlegging på Rjukan
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="assets/img/favicon/apple-icon-152x152.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/img/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/img/favicon/favicon-16x16.png"
+    />
+    <link href="assets/css/leaflet.css" rel="stylesheet" />
+    <!-- Lato Font -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="all"
+      href="assets/css/fonts.css"
+    />
+    <link href="assets/css/css.css" rel="stylesheet" />
+    <!-- Last leaflet JS etter Leaflet CSS -->
+    <script src="assets/js/leaflet.js" charset="utf-8"></script>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+      crossorigin="anonymous"
+    />
+    <script src="assets/js/geojson.js" charset="utf-8"></script>
+    <!-- Jquery -->
+    <script src="assets/js/jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+    <header id="header">
+      <div id="headercontent">
+        <a href="index.html"
+          ><img
+            id="logo-image"
+            src="assets/img/kommunevaapenet.png"
+            alt="Verdensarven / Tinn kommune"
+        /></a>
+        <nav id="nav">
+          <ul class="nav-list">
+            <li
+              class="fas fa-info fa-lg nav-item"
+              id="info"
+              onclick="visVelkommen()"
+            ></li>
+            <li
+              class="fas fa-question fa-lg nav-item"
+              id="guide"
+              onclick="
+                window.open('assets/descriptions/tegnforklaring.html', '_meny')
+              "
+            ></li>
+            <li
+              class="fas fa-crosshairs fa-lg nav-item"
+              id="crosshairs"
+              onclick="toggleLocator()"
+            ></li>
+          </ul>
+        </nav>
+        <p id="tittelnavn" onclick="window.location = 'index.html'">
+          verdensarvbyen rjukan
+        </p>
+      </div>
+    </header>
+    <div id="mapid"></div>
+    <div id="modal-background"></div>
+    <div
+      id="modal-container"
+      style="
+        display: none;
+        font-family: &quot;advocate-c41&quot;;
+        font-size: 1.5rem;
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        margin-left: 0;
+        background-color: #fff;
+        border: 2px solid rgba(35, 35, 35, 1);
+        padding: 0px 25px 10px 25px;
+        opacity: 1;
+      "
+    >
+      <div class="modal-content" id="modal-content"></div>
+    </div>
+    <script>
+      // modal-function
+      var modal = function (
+        modalInnhold,
+        modalBredde,
+        displayBackground = false,
+      ) {
+        if (displayBackground) {
+          document.getElementById("modal-background").style.display = "block";
+        }
+        document.getElementById("modal-content").innerHTML = modalInnhold;
+        document.getElementById("modal-container").style.width =
+          String(modalBredde) + "%";
+        document.getElementById("modal-container").style.left =
+          String(100 - modalBredde - 7) / 2 + "%";
+        document.getElementById("modal-container").style.display = "block";
+      };
+
+      function visVelkommen() {
+        var modalInnhold =
+          "<span onclick=\"document.getElementById('modal-background').style.display = 'none';document.getElementById('modal-container').style.display = 'none';\"><h2>Velkommen til interaktivt kart om kulturminner på Rjukan.</h2><ul><li>Zoom deg inn i kartet.</li><li>Velg forskjellige kartlag nede til venstre. </li><li>Ut fra hvilket kartlag du velger, får du opp informasjon ved å trykke på områder og enkeltbygninger i kartet.</li><li>Tegnforklaring, kartforklaring og utdypende artikler finner du i menyen oppe til høyre.</li><li>Langt fra alle beskrivelser er komplette. Gi oss gjerne tilbakemelding og innspill.</li><p> Kartet er laget av Tinn kommunes planavdeling til kommunedelplan Rjukan.</p></ul></span><span class=\"modal-content-btn fas fa-check-circle fa-lg\" onclick=\"document.getElementById('modal-background').style.display = 'none';document.getElementById('modal-container').style.display = 'none';\"></span>";
+        modal(modalInnhold, 50, true);
+      }
+    </script>
+    <script>
+      // Startverdier for kartet
+      var map = L.map("mapid", {
+        zoomControl: false,
+        minZoom: 4,
+        zoomSnap: 0.1,
+        maxBounds: [
+          [59.788543, 8.245382],
+          [59.989371, 8.831529],
+        ],
+      }).setView([59.878555, 8.59397], 15.5); // sentrert på Torget
+
+      // Opprett lag og sett z-Index
+      map.createPane("byggelinjelag").style.zIndex = 201;
+      map.createPane("omraadelag").style.zIndex = 202;
+      map.createPane("objektlag").style.zIndex = 205;
+      map.createPane("rjukanbanenlag").style.zIndex = 204;
+      map.createPane("verneverdilag").style.zIndex = 203;
+      map.createPane("hensynssonelag").style.zIndex = 200;
+
+      // Grunnkart
+      L.tileLayer(
+        "https://api.mapbox.com/styles/v1/tinnk/cjrbyzn7f00ij2sqpzweo4ft1/tiles/256/{z}/{x}/{y}?access_token=",
+        {
+          attribution:
+            '<a href="http://www.tinn.kommune.no/">Tinn kommune</a> | <a href="http://www.kartverket.no/">Kartverket</a> | <a href="http://www.mapbox.com/">MapBox</a>',
+          opacity: 1,
+        },
+      ).addTo(map);
+
+      function onEachFeature(feature, layer) {
+        layer.on("click", function () {
+          if (feature.properties.ut == "true") {
+            window.open(feature.properties.lenke, "_artikkel");
+          } else {
+            window.open(
+              "assets/descriptions/" + feature.properties.lenke,
+              "_artikkel",
+            );
+          }
+        });
+      }
+
+      // Objekter
+      var objektinstans = L.geoJSON(objektdata, {
+        style: function (feature) {
+          return {
+            fillColor: "yellow",
+            color: "#000",
+            weight: feature.properties.weight,
+            opacity: 0.65,
+            fillOpacity: 0.2,
+            dashArray: feature.properties.dasharray,
+          };
+        },
+        pane: "objektlag",
+        onEachFeature: onEachFeature,
+      })
+        .bindTooltip(
+          function (layer) {
+            return String(layer.feature.properties.beskrivelse);
+          },
+          { sticky: false, className: "hoverCSS" },
+        )
+        .addTo(map);
+
+      // Områder
+      var omraadeinstans = L.geoJSON(omraadedata, {
+        style: function (feature) {
+          return {
+            fillColor: feature.properties.fillcolor,
+            color: "#000",
+            weight: 1.5,
+            opacity: 0.65,
+            fillOpacity: 0.04, //feature.properties.fillOpacity
+          };
+        },
+        pane: "omraadelag",
+        onEachFeature: onEachFeature,
+      })
+        .bindTooltip(
+          function (layer) {
+            return String(layer.feature.properties.navn);
+          },
+          { sticky: true, className: "hoverCSS" },
+        )
+        .addTo(map);
+
+      // Objekter med høy verneverdi
+      var verneverdiinstans = L.geoJSON(verneverdidata, {
+        style: function (feature) {
+          return {
+            fillColor: feature.properties.fillcolor,
+            color: feature.properties.color,
+            weight: feature.properties.weight,
+            opacity: feature.properties.opacity,
+            fillOpacity: feature.properties.fillOpacity,
+          };
+        },
+        pane: "verneverdilag",
+        onEachFeature: onEachFeature,
+      }).bindTooltip(
+        function (layer) {
+          return String(layer.feature.properties.beskrivelse);
+        },
+        { sticky: false, className: "hoverCSS" },
+      );
+
+      // Byggelinjer
+      var byggelinjeinstans = L.geoJSON(byggelinjedata, {
+        style: function (feature) {
+          return {
+            color: feature.properties.farge,
+            weight: feature.properties.vekt,
+            opacity: 1,
+            dashArray: feature.properties.linjetype,
+          };
+        },
+        pane: "byggelinjelag",
+      }).addTo(map);
+
+      // Rjukanbanen
+      var rjukanbaneninstans = L.geoJSON(rjukanbanen, {
+        style: function (feature) {
+          return {
+            fillColor: "yellow",
+            color: "#000",
+            weight: 1,
+            opacity: 0.65,
+            fillOpacity: 0.05,
+            dashArray: "100 0",
+          };
+        },
+        pane: "rjukanbanenlag",
+        onEachFeature: onEachFeature,
+      })
+        .bindTooltip(
+          function (layer) {
+            return String(layer.feature.properties.beskrivelse);
+          },
+          { sticky: true, className: "hoverCSS" },
+        )
+        .addTo(map);
+
+      // Hensynssoner
+      var hensynssoneinstans = L.geoJSON(hensynssonedata, {
+        style: function (feature) {
+          return {
+            fillColor: "green",
+            color: "black",
+            weight: 1,
+            opacity: 0.65,
+            fillOpacity: 0.2,
+          };
+        },
+        pane: "hensynssonelag",
+      }).bindTooltip(
+        function (layer) {
+          return String(layer.feature.properties.beskrivelse);
+        },
+        { sticky: true, className: "hoverCSS" },
+      );
+
+      // Legg til lagkontroll
+      var controlLayers = {
+        Verdensarvbyen: objektinstans,
+        Områder: omraadeinstans,
+        Byggelinjer: byggelinjeinstans,
+        "Høy verneverdi": verneverdiinstans,
+        Hensynssoner: hensynssoneinstans,
+      };
+      L.control
+        .layers(null, controlLayers, {
+          collapsed: false,
+          position: "bottomleft",
+        })
+        .addTo(map);
+
+      // Lagkontrollskranker
+      map.on("overlayremove", function (eo) {
+        if (eo.name === "Verdensarvbyen") {
+          setTimeout(function () {
+            map.removeLayer(verneverdiinstans);
+            map.removeLayer(rjukanbaneninstans);
+          }, 10);
+        }
+      });
+      map.on("overlayadd", function (eo) {
+        if (eo.name === "Høy verneverdi") {
+          setTimeout(function () {
+            map.addLayer(objektinstans);
+          }, 10);
+        }
+        if (eo.name === "Verdensarvbyen") {
+          setTimeout(function () {
+            map.addLayer(rjukanbaneninstans);
+          }, 10);
+        }
+        if (eo.name === "Områder") {
+          setTimeout(function () {
+            map.removeLayer(hensynssoneinstans);
+          }, 10);
+        } else if (eo.name === "Hensynssoner") {
+          setTimeout(function () {
+            map.removeLayer(omraadeinstans);
+          }, 10);
+        }
+      });
+      L.control
+        .zoom({
+          position: "bottomright",
+        })
+        .addTo(map);
+
+      // Brukerlokalisering
+      var id, options, current_position, current_accuracy;
+      var locatorActive = false;
+
+      options = {
+        enableHighAccuracy: true,
+        timeout: 50000,
+        maximumAge: 0,
+      };
+
+      function success(position) {
+        let coordinates = new L.LatLng(
+          position.coords.latitude,
+          position.coords.longitude,
+        );
+        map.setView(coordinates, map.getZoom());
+        if (current_position) {
+          map.removeLayer(current_position);
+          map.removeLayer(current_accuracy);
+        }
+        current_position = L.circle(coordinates, {
+          radius: 4,
+          fill: true,
+          color: "red",
+          fillopacity: 1,
+        }).addTo(map);
+        current_accuracy = L.circle(coordinates, {
+          radius: position.coords.accuracy,
+          color: "red",
+          fill: true,
+          fillopacity: 0.1,
+        }).addTo(map);
+      }
+
+      function error(err) {
+        console.warn("ERROR(" + err.code + "): " + err.message);
+      }
+
+      var toggleLocator = function () {
+        locatorActive = !locatorActive;
+        if (locatorActive == true) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            id = navigator.geolocation.watchPosition(success, error, options);
+            document
+              .getElementById("crosshairs")
+              .classList.add("crosshairsactive");
+          });
+        } else {
+          document
+            .getElementById("crosshairs")
+            .classList.remove("crosshairsactive");
+          navigator.geolocation.clearWatch(id);
+          map.setView([59.88011364706956, 8.605479290708901], 14);
+          map.removeLayer(current_position);
+          map.removeLayer(current_accuracy);
+        }
+      };
+    </script>
+    <script src="assets/js/mobile.js"></script>
+  </body>
+</html>

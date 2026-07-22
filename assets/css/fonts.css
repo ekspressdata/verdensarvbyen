@@ -1,0 +1,100 @@
+/* Fonts: free OFL near-equivalents for the original (licensed) Butterick faces.
+   advocate-c41 -> Oswald | century-supra-* -> PT Serif | concourse-t3* -> Mulish
+   Family NAMES are kept so no other stylesheet needs changing.
+   Font files under assets/fonts/ are SIL Open Font License 1.1. */
+
+@font-face {
+  font-family: "advocate-c41";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url("../fonts/advocate-c41-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "century-supra-text";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url("../fonts/century-supra-text-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "century-supra-text";
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: url("../fonts/century-supra-text-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "century-supra-text";
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  src: url("../fonts/century-supra-text-400i.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "century-supra-text";
+  font-style: italic;
+  font-weight: bold;
+  font-display: swap;
+  src: url("../fonts/century-supra-text-700i.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "century-supra-caps";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url("../fonts/century-supra-caps-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "century-supra-caps";
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: url("../fonts/century-supra-caps-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "concourse-t3";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url("../fonts/concourse-t3-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "concourse-t3";
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: url("../fonts/concourse-t3-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "concourse-t3";
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  src: url("../fonts/concourse-t3-400i.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "concourse-t3";
+  font-style: italic;
+  font-weight: bold;
+  font-display: swap;
+  src: url("../fonts/concourse-t3-700i.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "concourse-t3-index";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url("../fonts/concourse-t3-index-400.woff2") format("woff2");
+}

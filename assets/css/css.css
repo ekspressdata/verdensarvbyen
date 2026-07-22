@@ -1,0 +1,350 @@
+body {
+  font-family: "Lato", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: auto;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+  background-color: #fff;
+}
+
+.leaflet-container {
+  background: #fff !important;
+}
+
+p,
+h1 {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+a {
+  color: rgb(1, 115, 182);
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: normal;
+  line-height: 18.5714px;
+  margin-bottom: 0px;
+}
+
+#navlink a:link,
+#navlink a:visited,
+#navlink a:hover {
+  color: "#fff";
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  opacity: 1;
+}
+#crosshairs,
+#guide,
+#info {
+  cursor: pointer;
+}
+
+.crosshairsactive {
+  color: red !important;
+}
+#modal-container {
+  z-index: 999999999;
+}
+#modal-background {
+  z-index: 999999998;
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  opacity: 0.4;
+  position: fixed;
+  top: 0px;
+}
+.modal-content-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  cursor: pointer;
+  padding-top: -30px;
+  padding-bottom: 10px;
+  color: #70914a;
+}
+.modal-content-btn h2 {
+  margin-top: 5px;
+}
+#logo-image {
+  max-height: 45px;
+  margin-right: 8px;
+  margin-top: 7px;
+  margin-left: 8px;
+  display: inline-block;
+  top: 7px;
+  left: 20px;
+}
+
+#mapid {
+  height: 100vh; /* Virker ikke godt på mobiltelefoner, se fiks i mobile.js */
+  z-index: 1;
+}
+
+#header {
+  position: fixed;
+  padding-left: 0px;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  z-index: 10;
+  background: rgba(35, 35, 35, 0.8);
+  box-shadow: 2px 2px 5px #888;
+  font-family: Lato, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  letter-spacing: -0.5px;
+  line-height: 60px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+#headercontent {
+  padding-left: 20px;
+  height: 60px;
+  box-sizing: border-box;
+}
+
+#tittelnavn {
+  font-family: "advocate-c41";
+  font-size: 2rem;
+  color: #fafafa;
+  display: inline;
+  font-weight: 500;
+  margin-block-end: 10px;
+  margin-block-start: 20px;
+  margin-bottom: 10px;
+  line-height: 60px;
+  font-weight: 500;
+  position: relative;
+  top: -12px;
+  cursor: pointer;
+}
+
+#slider {
+  width: 100%;
+  height: 100vh; /* Does not work well on mobile, see fix in mobile.js */
+  color: #333;
+  background: rgba(35, 35, 35, 0.2);
+  position: fixed;
+  right: 0px;
+  overflow-y: scroll;
+  touch-action: pan-y; /* Necessary to allow pan on touch-screens */
+  z-index: 5;
+  text-transform: uppercase;
+
+  border-bottom: 3px solid pink;
+  box-sizing: border-box; /* Making bottom of slider visible during development */
+  cursor: grab;
+  cursor: -o-grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+  -webkit-transition: top 0.3s linear 0s;
+  -moz-transition: top 0.3s linear 0s;
+  -o-transition: top 0.3s linear 0s;
+  transition: top 0.3s linear 0s;
+}
+
+.content {
+  /*max-width: 1024px;*/
+  width: 75%;
+  margin: auto;
+  opacity: 1;
+}
+
+#sliderframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background-color: #fff;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  z-index: 5;
+}
+.leaflet-bar {
+  border-radius: 0 !important;
+}
+.leaflet-control-layers {
+  text-decoration: none;
+  border-radius: 0px;
+  font-family: "advocate-c41";
+}
+
+#nav {
+  display: inline;
+  margin-right: 20px;
+  float: right;
+  margin-top: -16px;
+  font-color: "#fff";
+}
+.nav {
+  width: 100%;
+  display: inline;
+  margin-right: 20px;
+  float: right;
+  margin-top: -16px;
+  font-color: "#fff";
+  position: relative;
+  z-index: 4;
+  display: inline;
+  margin-right: 20px;
+  float: right;
+  margin-top: -16px;
+  font-color: "#fff";
+}
+.nav-mobile {
+  display: none; /* Hide from browsers that don't support media queries */
+  cursor: pointer;
+  position: fixed;
+  top: 5px;
+  left: 2px;
+  padding-left: 6px;
+  padding-top: 2px;
+  height: 35px;
+  width: 35px;
+  margin-left: 5px;
+}
+.nav-item {
+  margin: 0 16px 0 16px;
+}
+@media only screen and (max-width: 767px) {
+  #nav {
+    display: inline;
+    margin-right: 20px;
+    float: right;
+    margin-top: -16px;
+    font-color: "#fff";
+    margin-right: 10px !important;
+    margin-top: -26px !important;
+    color: rgba(35, 35, 35, 0.6);
+  }
+
+  #header {
+    background: rgba(35, 35, 35, 0);
+    box-shadow: none;
+  }
+  #tittelnavn {
+    display: none;
+  }
+  #logo-image {
+    max-height: 35px;
+    margin-right: 8px;
+    margin-top: 7px;
+    margin-left: 0px;
+    display: inline-block;
+    top: 7px;
+    left: 0px;
+  }
+  .nav-item {
+    margin: 0 8px 0 8px;
+  }
+  .nav-mobile {
+    background: rgba(255, 255, 255, 0.3);
+    color: rgba(35, 35, 35, 0.8);
+    display: block;
+  }
+  .leaflet-control-attribution a {
+    color: rgba(35, 35, 35, 0.8) !important;
+    font-size: 8px !important;
+  }
+  .leaflet-control {
+    margin-right: 2px !important;
+    margin-bottom: 2px !important;
+  }
+  .leaflet-control-layers {
+    line-height: 18px !important;
+    border: 1px solid rgba(35, 35, 35, 0.8) !important;
+    font-size: 1rem !important;
+    padding: 5px !important;
+    margin-left: 4px !important;
+    margin-bottom: 4px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+  .nav {
+    width: 100%;
+    display: inline;
+  }
+  .nav-list {
+    padding-bottom: 20px;
+  }
+
+  #sliderframe {
+    margin-top: 0px;
+    z-index: 9999999999999999999;
+  }
+  /*#header{display: none;}*/
+  /*#headercontent{display: none;}*/
+
+  #headercontent {
+    padding-left: 20px;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .nav-mobile {
+    display: none !important;
+  }
+  .leaflet-control-attribution a {
+    color: rgba(35, 35, 35, 0.8) !important;
+    font-size: 12px !important;
+  }
+  .leaflet-control-layers {
+    line-height: 36px;
+    border: 2px solid rgba(35, 35, 35, 0.8) !important;
+    font-size: 1.5rem;
+    margin-left: 25px !important;
+    margin-bottom: 25px !important;
+    padding-left: 15px !important;
+    padding-right: 20px !important;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+
+  #sliderframe {
+    margin-top: 62px;
+  }
+
+  #slidercontent {
+    background: #fff;
+    display: block;
+    margin-top: 62px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    overflow: hidden; /* Necessary to expand the containing div ? */
+  }
+
+  #slider img {
+    border: 5px solid #292929;
+    margin: 10px;
+    outline: 5px solid #e3e3e3;
+  }
+
+  .slide-in {
+    top: 0% !important;
+  }
+
+  .slide-out {
+    top: -100% !important;
+  }
+
+  .hoverCSS {
+    font-family: "advocate-c41";
+    font-size: 1.2rem;
+    color: black;
+    background: white;
+    border: 1px solid black;
+    border-radius: 0;
+  }
+}
