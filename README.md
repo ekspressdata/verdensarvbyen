@@ -1,4 +1,6 @@
+
 # Verdensarvbyen Rjukan – interaktivt kulturminnekart
+[<img width="378" height="185" alt="verdensarv" src="https://github.com/user-attachments/assets/8be6758e-a109-49c2-8aeb-048080129385" />](https://tinn-kommune.com/verdensarvbyen/)
 
 Et interaktivt kart som formidler arkitektur, bygningstyper og
 byplanlegging i verdensarvbyen Rjukan. Kartet viser verneverdig
